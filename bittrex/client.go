@@ -20,6 +20,9 @@ func (c *client) do(url string) ([]byte, error) {
 		return nil, errors.New(err.Error())
 	}
 	defer resp.Body.Close()
+	if resp.StatusCode != 200 {
+		return nil, errors.New(resp.Status)
+	}
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return nil, errors.New(err.Error())

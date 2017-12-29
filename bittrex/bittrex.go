@@ -3,6 +3,7 @@ package bittrex
 import (
 	"encoding/json"
 	"errors"
+	"strings"
 )
 
 const (
@@ -89,4 +90,27 @@ func GetCurrencies(c *client) ([]Currency, error) {
 	}
 
 	return currencies, nil
+}
+
+func GetTicker(c *client, m string) (Ticker, error) {
+	var (
+		ticker Ticker
+		err error
+		body []byte
+	)
+	method := "/public/getticker?market="
+
+	if body, err = c.do(c.Url + method + strings.ToUpper(m)); err != nil {
+		return Ticker{}, err
+	}
+
+	if err = handleResponse(body); err != nil {
+		return Ticker{}, err
+	}
+
+	if err = json.Unmarshal(response.Result, &ticker); err != nil {
+		return Ticker{}, errors.New(err.Error())
+	}
+
+	return ticker, nil
 }

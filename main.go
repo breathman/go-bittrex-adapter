@@ -8,6 +8,7 @@ import (
 var (
 	currencies []bittrex.Currency
 	markets []bittrex.Market
+	ticker bittrex.Ticker
 	err error
 )
 
@@ -22,4 +23,10 @@ func main() {
 	if markets, err = bittrex.GetMarkets(api.Client); err != nil {
 		fmt.Println(err)
 	}
+	fmt.Println(markets)
+
+	if ticker, err = bittrex.GetTicker(api.Client, "BTC-LTT"); err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(ticker)
 }
